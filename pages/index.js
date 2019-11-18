@@ -10,7 +10,7 @@ import Layout from '../components/Layout.js';
 class Home extends React.Component {
 	constructor(props){
 		super(props);
-		this.state={search: 'Search'}
+		this.state={search: ''};
 	}
 
 	handleUpdate(evt){
@@ -18,17 +18,18 @@ class Home extends React.Component {
 	}
 
 	async handleSearch(evt){
-	    const user = await getInfo(this.state.search);
+      const user = await getInfo(this.state.search);
 	    this.setState({user});
 	}
 
   handleFunction(){
-    if(this.state.user == null){
+    if(this.state.user != Object && this.state.search != ""){
       console.log(this.state.user);
       return (<div><h3>{this.state.search} doesnt exist.</h3></div>);
     }
-
-    return null;
+    else {
+      return null;
+    }
   }
 
 	render(){
@@ -57,7 +58,7 @@ class Home extends React.Component {
 
         <img src="/static/sponge.jpg" className="App-logo" />
         <h2>New Mexico Campground Search</h2>
-        <p><input type='text' value={this.state.search} onChange={this.handleUpdate.bind(this)}/></p>
+        <p><input type='text' placeholder='Search' value={this.state.search} onChange={this.handleUpdate.bind(this)}/></p>
           <div className="button-style" onClick={this.handleSearch.bind(this)}>Search</div>
           {this.state.user ? <div>
           		<br /> 
@@ -65,7 +66,12 @@ class Home extends React.Component {
                 <img id="hello" src= {this.state.user.profile.image_url} style={{ maxWidth: '400px', maxHeight: '400px' }}/> 
                 <p>{this.state.user.profile.description}</p>
 
-         	</div> : handleFunction() }
+         	</div> : null }
+
+          {'user' in this.state && this.state.user == undefined ? <div>
+              <h2><b>{this.state.search} doesn't exist</b></h2>
+          </div> : null} 
+
           </body>
 
 	        <style jsx>{`
